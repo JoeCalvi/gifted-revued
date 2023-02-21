@@ -10,6 +10,13 @@ class GiftsService {
         AppState.gifts = res.data.map(g => new Gift(g))
         logger.log('[getting Gifts]', AppState.gifts)
     }
+
+    async openGift(giftId) {
+        const res = await sandbox_api.put(`gifts/${giftId}`, { opened: true })
+        let oldGiftIndex = AppState.gifts.findIndex(g => g.id == giftId)
+        AppState.gifts.splice(oldGiftIndex, 1, new Gift(res.data))
+        logger.log(res.data)
+    }
 }
 
 export const giftsService = new GiftsService()

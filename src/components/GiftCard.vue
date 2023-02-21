@@ -1,5 +1,5 @@
 <template>
-    <div class="giftcard">
+    <div class="giftcard selectable" @click="openGift(gift.id)">
         <div class="card border-dark">
             <div v-if="gift.opened == false">
                 <img src="https://www.pngitem.com/pimgs/m/215-2152100_mystery-box-png-transparent-background-gift-box-png.png" 
@@ -18,6 +18,10 @@
 
 <script>
 import { Gift } from '../models/Gift.js'
+import { giftsService } from '../services/GiftsService.js'
+import { logger } from '../utils/Logger.js'
+import Pop from '../utils/Pop.js'
+import { onMounted, computed } from 'vue';
 
 export default {
 
@@ -26,7 +30,20 @@ export default {
     },
 
     setup(){
-        return {}
+
+        return {
+
+            gifts: computed(() => AppState.gifts),
+
+            async openGift(giftId) {
+              try {
+                await giftsService.openGift(giftId)
+              } catch (error) {
+                Pop.error(error)
+                logger.log('[openGift error]', error)
+              }
+            }        
+        }
     }
 }
 </script>
