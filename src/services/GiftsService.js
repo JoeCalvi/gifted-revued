@@ -17,6 +17,12 @@ class GiftsService {
         AppState.gifts.splice(oldGiftIndex, 1, new Gift(res.data))
         logger.log(res.data)
     }
+
+    async createGift(giftData) {
+        const res = await sandbox_api.post('gifts', giftData)
+        let gift = new Gift(res.data)
+        AppState.gifts.push(gift)
+    }
 }
 
 export const giftsService = new GiftsService()
